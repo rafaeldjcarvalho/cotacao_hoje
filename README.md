@@ -26,6 +26,10 @@ Lista de todas as Tecnologias usadas no backend:
     - MySQL
     - H2 Database
 
+API Externa (Fonte de Dados):
+- Nome: Awesome Exchange Rate API
+- URL Base: https://economia.awesomeapi.com.br/json/
+- Vantagens: Gratuita, sem necessidade de autenticação (API Key) e com endpoints fáceis de usar.
 
 <h2 id="started">🚀 Começando</h2>
 
