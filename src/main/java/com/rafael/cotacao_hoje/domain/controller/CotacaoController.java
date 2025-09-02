@@ -1,5 +1,7 @@
 package com.rafael.cotacao_hoje.domain.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -20,9 +22,15 @@ public class CotacaoController {
 	@Autowired
 	private CotacaoExternaService cotacaoExternaService;
 	
+	@GetMapping("/agora/{par}")
+	public ResponseEntity<Cotacao> buscarCotacaoAgoraPorCodigo(@PathVariable String par) {
+		Cotacao Cotacao = this.cotacaoExternaService.buscarCotacaoPorCodigo(par);
+		return ResponseEntity.ok(Cotacao);
+	}
+	
 	@GetMapping("/agora/dashboard")
-	public ResponseEntity<Flux<Cotacao>> buscarCotacaoAgora() {
-		Flux<Cotacao> lista = this.cotacaoExternaService.buscarCotacoesAtuais("USD-BRL,EUR-BRL,BTC-BRL");
+	public ResponseEntity<List<Cotacao>> buscarCotacaoAgora() {
+		List<Cotacao> lista = this.cotacaoExternaService.buscarCotacoesRecente();
 		return ResponseEntity.ok(lista);
 	}
 	
@@ -30,5 +38,11 @@ public class CotacaoController {
 	public ResponseEntity<Flux<Cotacao>> buscarHistorico(@PathVariable String par, @RequestParam("dias") int dias) {
 		Flux<Cotacao> lista = this.cotacaoExternaService.buscarHistoricoDiario(par, dias);
 		return ResponseEntity.ok(lista);
+	}
+	
+	@GetMapping("/moedas-suportadas")
+	public ResponseEntity<String[]> buscarMoedasSuportadas() {
+		String[] moedas = this.cotacaoExternaService.getMoedasSuportadas();
+		return ResponseEntity.ok(moedas);
 	}
 }
