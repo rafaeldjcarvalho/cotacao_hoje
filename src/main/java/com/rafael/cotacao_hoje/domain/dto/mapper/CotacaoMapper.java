@@ -17,7 +17,7 @@ public class CotacaoMapper {
 	public Cotacao toEntity(String codigoCompleto, MoedaDTO dto) {
         Cotacao cotacao = new Cotacao();
 
-        cotacao.setCodigoMoeda(codigoCompleto); 
+        cotacao.setCodigoMoeda(dto.code()+"-"+dto.codein()); 
 
         // Remove espaços e barras para ficar formatado
         cotacao.setNomeFormatado(dto.name());
