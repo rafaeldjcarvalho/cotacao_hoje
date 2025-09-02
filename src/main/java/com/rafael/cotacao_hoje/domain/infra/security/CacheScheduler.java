@@ -12,7 +12,7 @@ public class CacheScheduler {
 	@Autowired
 	private CotacaoExternaService cotacaoExternaService;
 
-	@Scheduled(fixedRate = 60000)
+	@Scheduled(fixedRate = 180000) // 30 min
 	public void atualizarCotacoes() {
 		String pares = this.pares();
 		this.cotacaoExternaService.buscarCotacoesAtuais(pares)
