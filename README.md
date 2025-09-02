@@ -20,6 +20,7 @@ Lista de todas as Tecnologias usadas no backend:
     - Spring Web
     - Spring Dev Tools
     - Spring Data JPA
+    - Spring Web Flux
     - Loombok
 - Maven
 - Banco de dados:
@@ -73,23 +74,124 @@ git clone https://github.com/rafaeldjcarvalho/cotacao_hoje
 
 <h2 id="routes">📍 API Endpoints</h2>
 
+Aqui está a lista das principais rotas da API e o que elas fazem.
 
+- CotaçãoController:
+
+
+| route               | description                                          
+|----------------------|-----------------------------------------------------
+| <kbd>GET /api/cotacoes/agora/{par}</kbd>      | Busca a cotação mais recente para o par, ver [response details](#get-par-cotacao)
+| <kbd>GET /api/cotacoes/agora/dashboard</kbd>     | Busca as cotações mais recente de todos os pares pré-definidos, ver [response details](#get-pares-cotacao)
+| <kbd>GET /api/cotacoes/historico/{par}?dias=5</kbd>      | Recupera as cotações de um par até uma quantidade de dias, ver [response details](#get-historico-cotacao)
+| <kbd>GET /api/cotacoes/moedas-suportadas</kbd>     | Recupera as moedas suportadas pela aplicação, ver [response details](#get-moeda-cotacao)
+
+
+<h3 id="get-par-cotacao">GET /api/cotacoes/agora/USD-BRL</h3>
+
+**RESPONSE**
+```json
+{
+    "id": 2,
+    "codigoMoeda": "USD-BRL",
+    "nomeFormatado": "Dólar Americano/Real Brasileiro",
+    "valor": 5.46,
+    "dataHoraConsulta": "2025-09-02T15:09:41"
+}
+```
+
+<h3 id="get-pares-cotacao">GET /api/cotacoes/agora/dashboard</h3>
+
+**RESPONSE**
+```json
+[
+    {
+        "id": 2,
+        "codigoMoeda": "USD-BRL",
+        "nomeFormatado": "Dólar Americano/Real Brasileiro",
+        "valor": 5.46,
+        "dataHoraConsulta": "2025-09-02T15:09:41"
+    },
+    {
+        "id": 3,
+        "codigoMoeda": "EUR-BRL",
+        "nomeFormatado": "Euro/Real Brasileiro",
+        "valor": 6.35,
+        "dataHoraConsulta": "2025-09-02T15:06:19"
+    },
+    {
+        "id": 1,
+        "codigoMoeda": "BTC-BRL",
+        "nomeFormatado": "Bitcoin/Real Brasileiro",
+        "valor": 604882.00,
+        "dataHoraConsulta": "2025-09-02T15:09:43"
+    }
+]
+```
+
+<h3 id="get-historico-cotacao">GET /api/cotacoes/historico/USD-BRL?dias=5</h3>
+
+**RESPONSE**
+```json
+[
+    {
+        "id": null,
+        "codigoMoeda": "USD-BRL",
+        "nomeFormatado": "Dólar Americano/Real Brasileiro",
+        "valor": 5.4635,
+        "dataHoraConsulta": "2025-09-02T15:07:42"
+    },
+    {
+        "id": null,
+        "codigoMoeda": "USD-BRL",
+        "nomeFormatado": "Dólar Americano/Real Brasileiro",
+        "valor": 5.4358,
+        "dataHoraConsulta": "2025-09-01T20:49:05"
+    },
+    {
+        "id": null,
+        "codigoMoeda": "USD-BRL",
+        "nomeFormatado": "Dólar Americano/Real Brasileiro",
+        "valor": 5.4281,
+        "dataHoraConsulta": "2025-08-31T20:52:57"
+    },
+    {
+        "id": null,
+        "codigoMoeda": "USD-BRL",
+        "nomeFormatado": "Dólar Americano/Real Brasileiro",
+        "valor": 5.4284,
+        "dataHoraConsulta": "2025-08-29T18:07:26"
+    },
+    {
+        "id": null,
+        "codigoMoeda": "USD-BRL",
+        "nomeFormatado": "Dólar Americano/Real Brasileiro",
+        "valor": 5.4128,
+        "dataHoraConsulta": "2025-08-28T20:37:59"
+    }
+]
+```
+
+<h3 id="get-moeda-cotacao">GET /api/cotacoes/moedas-suportadas</h3>
+
+**RESPONSE**
+```json
+[
+    "USD-BRL",
+    "EUR-BRL",
+    "BTC-BRL"
+]
+```
 
 Fluxo Resumido
 
 ```plaintext
-Usuário → 
-            ↳ 
-            ↳ 
+Frontend → CotacaoController
+            ↳ Recupera dados do Banco de dados
                 |
-                |→ 
-                |      ↳
-                |
-                |→ 
-                |      ↳ 
-                |
-                |→ 
-                |      ↳
+                |→ CacheSchedule
+                |     ↳ Recupera dados da API externa
+                      ↳ Armazena dados no Banco de dados
 ```
 
 <h2 id="colab">🤝 Collaborators</h2>
