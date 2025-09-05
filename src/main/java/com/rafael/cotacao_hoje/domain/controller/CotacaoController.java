@@ -35,7 +35,7 @@ public class CotacaoController {
 	}
 	
 	@GetMapping("/historico/{par}")
-	public ResponseEntity<Flux<Cotacao>> buscarHistorico(@PathVariable String par, @RequestParam("dias") int dias) {
+	public ResponseEntity<Flux<Cotacao>> buscarHistorico(@PathVariable String par, @RequestParam(defaultValue = "10") int dias) {
 		Flux<Cotacao> lista = this.cotacaoExternaService.buscarHistoricoDiario(par, dias);
 		return ResponseEntity.ok(lista);
 	}
